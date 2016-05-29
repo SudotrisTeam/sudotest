@@ -8,4 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RooWebScaffold(path = "owners", formBackingObject = Owner.class)
 public class OwnerController {
+	@RequestMapping(value = "/mock")
+	public String get() {
+
+		return "foo";
+	}
 }
