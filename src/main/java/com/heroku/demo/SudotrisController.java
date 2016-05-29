@@ -23,10 +23,13 @@ import java.util.List;
 public class SudotrisController {
 
 
+    private RecordRepository repository;
+
     @Autowired
     public SudotrisController(RecordRepository repository) {
-
+        this.repository = repository;
     }
+
 
     @RequestMapping("/foo/{id}")
     public int foo(@PathVariable("id") int id) {
