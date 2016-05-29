@@ -1,8 +1,7 @@
 {
-  "name": "MEAN Contact List Example",
-  "description": "A MEAN app that allows users to manage a contact list.",
-  "repository": "https://github.com/chrisckchang/mean-contactlist",
-  "logo": "https://mlab.com/company/brand/resources/mLab-logo-onlight.png",
-  "keywords": ["node", "express", "angular", "MEAN", "mongodb", "REST", "API"],
-  "addons": ["mongolab"]
+  "name": "Spring Boot Heroku Demo",
+  "description": "This is a small demo application for showing how to run a Spring Boot application on Heroku.",
+  "repository": "https://github.com/kissaten/spring-boot-heroku-demo",
+  "image": "heroku/java",
+  "addons": [ "heroku-postgresql" ]
 }
