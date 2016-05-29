@@ -26,9 +26,10 @@ public class SudotrisController {
         this.repository = repository;
     }
 
-
+/*
     @RequestMapping(value = "/fooTest", method = RequestMethod.GET)
     public @ResponseBody String foo() {
         return "foo";
     }
+    */
 }
