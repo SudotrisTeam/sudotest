@@ -1,5 +1,7 @@
-This quickstart will get you going with a Spring MVC Hibernate application that uses a Postgres database service, deployed to Heroku.
+# mean-contactlist
 
-The is a demo application for the [Getting Started with Spring MVC Hibernate on Heroku](https://devcenter.heroku.com/articles/getting-started-with-spring-mvc-hibernate) guide.
+Contact List is a RESTful API server and web application built with the MEAN stack. It is a simple example that aims to concisely demonstrate basic MEAN and REST architecture. You can find the full tutorial here: https://devcenter.heroku.com/articles/mean-apps-restful-api.
 
+You can deploy a live copy of this application to Heroku with the button below.
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/chrisckchang/mean-contactlist)
