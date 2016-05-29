@@ -1,10 +1,10 @@
+console.log('foo');
 var renderer, scene, camera, cube;
 var hauteurFacette = 10;
 var tailleMatrice;
 var geometry, material, ombre;
 var grille, grilleCube;
 var initialDate = new Date();
-
 initCompteur();
 init();
 animate();
