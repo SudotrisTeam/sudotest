@@ -62,7 +62,12 @@ public class HomeControllerBis {
     }
 
     @RequestMapping(value = "/foo", method = RequestMethod.GET)
-    public int foo() {
+    public Integer foo() {
         return 5;
+    }
+
+    @RequestMapping(value = "/fooo", method = RequestMethod.GET)
+    public void fooo() {
+
     }
 }
