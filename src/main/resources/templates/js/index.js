@@ -1,26 +1,26 @@
-console.log('foo');
 var renderer, scene, camera, cube;
 var hauteurFacette = 10;
 var tailleMatrice;
 var geometry, material, ombre;
 var grille, grilleCube;
 var initialDate = new Date();
+
 initCompteur();
 init();
 animate();
 
 function init(){
-	// on initialise le moteur de rendu
-	renderer = new THREE.WebGLRenderer();
+    // on initialise le moteur de rendu
+    renderer = new THREE.WebGLRenderer();
 
-	// si WebGL ne fonctionne pas sur votre navigateur vous pouvez utiliser le moteur de rendu Canvas à la place
-	// renderer = new THREE.CanvasRenderer();
-	renderer.setSize( window.innerWidth*.85, window.innerHeight*.85 );
-	document.getElementById('container').appendChild(renderer.domElement);
+    // si WebGL ne fonctionne pas sur votre navigateur vous pouvez utiliser le moteur de rendu Canvas à la place
+    // renderer = new THREE.CanvasRenderer();
+    renderer.setSize( window.innerWidth*.85, window.innerHeight*.85 );
+    document.getElementById('container').appendChild(renderer.domElement);
 
-	// on initialise la scène
-	scene = new THREE.Scene();
-
+    // on initialise la scène
+    scene = new THREE.Scene();
+	
 	// chargement de la grille depuis les fichiers de grilles
 	grille = loadGrid();
 	tailleMatrice = grille.length;
@@ -28,15 +28,15 @@ function init(){
 	var grilleZone = loadZones();
 	var nbZone = countZones(grilleZone);
 
-	// on initialise la camera que l’on place ensuite sur la scène
-	camera = new THREE.PerspectiveCamera(Math.max(1.5*tailleMatrice, 15), window.innerWidth / window.innerHeight, 1, 10000 );
-	camera.position.set(0, 900, 450);
+    // on initialise la camera que l’on place ensuite sur la scène
+    camera = new THREE.PerspectiveCamera(Math.max(1.5*tailleMatrice, 15), window.innerWidth / window.innerHeight, 1, 10000 );
+    camera.position.set(0, 900, 450);
 	camera.rotation.set(-1.1,0,0);
-
-	scene.add(camera);
-
-	// on crée un mesh correspondant au cube qui chute, auquel on attribue un matériau. Puis on l’ajoute à la scène
-	geometry = new THREE.CubeGeometry( 20, 20, 20 );
+	
+    scene.add(camera);
+    
+    // on crée un mesh correspondant au cube qui chute, auquel on attribue un matériau. Puis on l’ajoute à la scène
+    geometry = new THREE.CubeGeometry( 20, 20, 20 );
 	material = new Array();
 	var materialValide = new Array();
 	for(var k=0; k<tailleMatrice; k++){
@@ -46,68 +46,68 @@ function init(){
 		materialValide.push(new THREE.MeshBasicMaterial( { map: img } ));
 	}
 	random = Math.round(Math.random() * (tailleMatrice -1));
-	cube = new THREE.Mesh( geometry, material[random] );
+    cube = new THREE.Mesh( geometry, material[random] );
 	cube.position.set(0,200,0);
-	scene.add( cube );
-
+    scene.add( cube );
+	
 	// on crée l'ombre de notre cube de la même manière
-	var materialPlane = new THREE.MeshBasicMaterial( { color: 0x999999, wireframe: false, transparent: true, opacity: 0.8 } );
-	ombre = new THREE.Mesh( geometry, materialPlane );
+    var materialPlane = new THREE.MeshBasicMaterial( { color: 0x999999, wireframe: false, transparent: true, opacity: 0.8 } );
+    ombre = new THREE.Mesh( geometry, materialPlane );
 	ombre.position.set(0,10,0);
 	ombre.rotation.set(-3.14/2,0,0);
-	scene.add( ombre );
-
+    scene.add( ombre );
+	
 	// On crée les propriétés de la grille
 	var geometryBase = new THREE.CubeGeometry( 20, 2, 20 );
 	var materialBase = [new THREE.MeshBasicMaterial( { color: 0x0000FF, wireframe: false } ),
-		new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: false } ),
-		new THREE.MeshBasicMaterial( { color: 0xFF0000, wireframe: false } ),
-		new THREE.MeshBasicMaterial( { color: 0xFF00FF, wireframe: false } ),
-		new THREE.MeshBasicMaterial( { color: 0x00FFFF, wireframe: false } ),
-		new THREE.MeshBasicMaterial( { color: 0xFFFF00, wireframe: false } ),
-		new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: false } ),
-		new THREE.MeshBasicMaterial( { color: 0xFFFFFF, wireframe: false } ),
-		new THREE.MeshBasicMaterial( { color: 0x990099, wireframe: false } ),
-	];
-
+						new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: false } ),
+						new THREE.MeshBasicMaterial( { color: 0xFF0000, wireframe: false } ),
+						new THREE.MeshBasicMaterial( { color: 0xFF00FF, wireframe: false } ),
+						new THREE.MeshBasicMaterial( { color: 0x00FFFF, wireframe: false } ),
+						new THREE.MeshBasicMaterial( { color: 0xFFFF00, wireframe: false } ),
+						new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: false } ),
+						new THREE.MeshBasicMaterial( { color: 0xFFFFFF, wireframe: false } ),
+						new THREE.MeshBasicMaterial( { color: 0x990099, wireframe: false } ),
+						];
+	
 	var geometryFacetteGD = new THREE.CubeGeometry( 1, hauteurFacette, 20 );
 	var materialFacetteGD = new THREE.MeshBasicMaterial( { color: 0x555555, wireframe: false } );
-
+	
 	var geometryFacetteHaut = new THREE.CubeGeometry( 22, hauteurFacette, 1 );
 	var materialFacetteHaut = new THREE.MeshBasicMaterial( { color: 0xAAAAAA, wireframe: false } );
-
+	
 	var geometryFacetteBasse = new THREE.CubeGeometry( 22, hauteurFacette, 1 );
 	var materialFacetteBasse = new THREE.MeshBasicMaterial( { color: 0x555555, wireframe: false } );
-
+	
 	var decalageX, decalageY;
-
+			
 	// on créé plusieurs mesh auquel on définit un matériau puis on les ajoute à la scène
 	for (var i=0; i<tailleMatrice; i++) {
 		for (var j=0; j<tailleMatrice; j++) {
 			decalageX = 22*(i - Math.floor(tailleMatrice /2));
 			decalageY = 22*(j - Math.floor(tailleMatrice /2));
-
+			
 			if(grille[j][i] > -1) {
 				// Base de l'emplacement
 				emplacementBase = new THREE.Mesh( geometryBase, materialBase[grilleZone[j][i] -1] );
 				emplacementBase.position.set(decalageX, 0, decalageY);
 				scene.add( emplacementBase );
-
+				
 				//facette gauche
 				emplacementFacetteGD = new THREE.Mesh( geometryFacetteGD, materialFacetteGD );
 				emplacementFacetteGD.position.set(decalageX -10.5,hauteurFacette/2,decalageY);
 				scene.add( emplacementFacetteGD );
-
+				
 				//facette droite
 				emplacementFacetteGD = new THREE.Mesh( geometryFacetteGD, materialFacetteGD );
 				emplacementFacetteGD.position.set(decalageX +10.5,hauteurFacette/2,decalageY);
 				scene.add( emplacementFacetteGD );
-
+				
 				//facette haute
 				emplacementFacetteHaut = new THREE.Mesh( geometryFacetteHaut, materialFacetteHaut );
 				emplacementFacetteHaut.position.set(decalageX, hauteurFacette/2, decalageY -10.5);
 				scene.add( emplacementFacetteHaut );
-
+				
 				//facette basse
 				emplacementFacetteBasse = new THREE.Mesh( geometryFacetteBasse, materialFacetteBasse );
 				emplacementFacetteBasse.position.set(decalageX, hauteurFacette/2, decalageY +10.5);
@@ -120,14 +120,14 @@ function init(){
 			}
 		}
 	}
-
-
+	
+	
 }
 
 function animate(){
-	// on appelle la fonction animate() récursivement à chaque frame
-	requestAnimationFrame( animate );
-	// on fait "tomber" le cube le long de l'axe y
+    // on appelle la fonction animate() récursivement à chaque frame
+    requestAnimationFrame( animate );
+    // on fait "tomber" le cube le long de l'axe y
 	if (cube.position.y > 10.2) {
 		cube.position.y -= 0.2;
 	}
@@ -151,8 +151,8 @@ function animate(){
 		scene.add( cube );
 		ombre.position.set(0,10,0);
 	}
-	// on effectue le rendu de la scène
-	renderer.render( scene, camera );
+    // on effectue le rendu de la scène
+    renderer.render( scene, camera );
 }
 
 function moveCube(e){
@@ -173,26 +173,26 @@ function moveCube(e){
 
 function loadGrid(){
 	return [[0,0,0,2,0,0,0,0,0],
-		[0,8,0,0,3,0,0,7,0],
-		[3,0,0,5,0,4,0,0,0],
-		[0,0,0,0,0,0,0,2,8],
-		[8,3,0,0,1,0,0,0,0],
-		[0,4,0,7,2,0,3,5,1],
-		[0,7,0,0,5,6,0,0,4],
-		[0,0,3,0,0,0,0,0,0],
-		[2,0,5,4,0,1,6,0,3]];
+			[0,8,0,0,3,0,0,7,0],
+			[3,0,0,5,0,4,0,0,0],
+			[0,0,0,0,0,0,0,2,8],
+			[8,3,0,0,1,0,0,0,0],
+			[0,4,0,7,2,0,3,5,1],
+			[0,7,0,0,5,6,0,0,4],
+			[0,0,3,0,0,0,0,0,0],
+			[2,0,5,4,0,1,6,0,3]];
 }
 
 function loadEmptyGrid(){
 	return [[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0],
-		[0,0,0,0,0,0,0,0,0]];
+			[0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0]];
 }
 
 function loadCubes() {
@@ -205,14 +205,14 @@ function loadCubes() {
 
 function loadZones(){
 	return [[1,1,1,2,2,2,3,3,3],
-		[1,1,1,2,2,2,3,3,3],
-		[1,1,1,2,2,2,3,3,3],
-		[4,4,4,5,5,5,6,6,6],
-		[4,4,4,5,5,5,6,6,6],
-		[4,4,4,5,5,5,6,6,6],
-		[7,7,7,8,8,8,9,9,9],
-		[7,7,7,8,8,8,9,9,9],
-		[7,7,7,8,8,8,9,9,9]];
+			[1,1,1,2,2,2,3,3,3],
+			[1,1,1,2,2,2,3,3,3],
+			[4,4,4,5,5,5,6,6,6],
+			[4,4,4,5,5,5,6,6,6],
+			[4,4,4,5,5,5,6,6,6],
+			[7,7,7,8,8,8,9,9,9],
+			[7,7,7,8,8,8,9,9,9],
+			[7,7,7,8,8,8,9,9,9]];
 }
 
 function countZones(grilleZone){
@@ -225,24 +225,24 @@ function countZones(grilleZone){
 	return eltPresents.size;
 }
 function initCompteur(){
-	var currentDate = new Date();
-	var chrono = dateDiff(initialDate, currentDate);
-	var chronoHTML = document.getElementById("chrono");
-	chronoHTML.innerHTML = (chrono.heures < 10 ? '0' + chrono.heures : chrono.heures) +":"
+    var currentDate = new Date();
+    var chrono = dateDiff(initialDate, currentDate);
+    var chronoHTML = document.getElementById("chrono");
+    chronoHTML.innerHTML = (chrono.heures < 10 ? '0' + chrono.heures : chrono.heures) +":"
 		+ (chrono.minutes < 10 ? '0' + chrono.minutes : chrono.minutes)+":"
 		+ (chrono.secondes < 10 ? '0' + chrono.secondes : chrono.secondes);
-	setInterval(initCompteur, 500);
+    setInterval(initCompteur, 500);
 }
 
 function dateDiff(date1, date2){
-	var diff = {};
-	var tmp = date2 - date1;
-	tmp = Math.floor(tmp/1000);
-	diff.secondes = tmp % 60;
-	tmp = Math.floor((tmp-diff.secondes)/60);
-	diff.minutes = tmp % 60;
-	tmp = Math.floor((tmp-diff.minutes)/60);
-	diff.heures = tmp % 24;
+    var diff = {};
+    var tmp = date2 - date1;
+    tmp = Math.floor(tmp/1000);
+    diff.secondes = tmp % 60;
+    tmp = Math.floor((tmp-diff.secondes)/60);
+    diff.minutes = tmp % 60;
+    tmp = Math.floor((tmp-diff.minutes)/60);
+    diff.heures = tmp % 24;
 
-	return diff;
+    return diff;
 }
