@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 
-@Controller
+@RestController
 public class SudotrisController {
 
 
@@ -30,5 +30,15 @@ public class SudotrisController {
     @RequestMapping(value = "/fooTest", method = RequestMethod.GET)
     public @ResponseBody String foo() {
         return "foo";
+    }
+
+    @RequestMapping(value = "/foooTest", method = RequestMethod.GET)
+    public String fooo() {
+        return "foo";
+    }
+
+    @RequestMapping("/greeting")
+    public String greeting(@RequestParam(value="name", defaultValue="World") String name) {
+        return name;
     }
 }
