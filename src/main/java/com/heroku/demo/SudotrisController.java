@@ -41,4 +41,13 @@ public class SudotrisController {
     public String greeting(@RequestParam(value="name", defaultValue="World") String name) {
         return name;
     }
+    @RequestMapping(value = "/id/{id}/mock", method = RequestMethod.GET)
+    public String mock(@PathVariable("id") int id) {
+        return "foo";
+    }
+    @RequestMapping(value = "/id/{id}/reel", method = RequestMethod.GET)
+    public int reel(@PathVariable("id") int id) {
+        return id;
+    }
+
 }
